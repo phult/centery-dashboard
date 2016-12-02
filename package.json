@@ -1,16 +1,20 @@
 {
-    "name": "Quicksort.io",
-    "description": "A lightweight node.js framework for http and socket.io server application.",
-    "homepage": "https://github.com/megaads-vn",
-    "author": "Megaads <info.megaads@gmail.com>",
-    "keywords": ["framework", "http", "socket.io", "mvc", "lightweight", "server", "engine", "real time", "notification", "chat", "rest"],
+    "name": "centery-dashboard",
+    "description": "",
+    "homepage": "http://centery.net",
+    "author": "PhuLuong <phult.contact@gmail.com>",
+    "keywords": ["smart home", "arduino", "bluetooth", "diy"],
     "license": "MIT",
-    "version": "0.7.1",
+    "version": "0.1.0",
+    "engines": {
+        "node": "4.x",
+        "npm": "3.x"
+    },
     "main": "app.js",
     "contributors": [],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/megaads-vn/quicksort.io"
+        "url": "git+https://github.com/phult/centery-dashboard.git"
     },
     "dependencies": {
         "socket.io": "1.*",
