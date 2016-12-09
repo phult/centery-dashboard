@@ -1,5 +1,6 @@
 module.exports = {
-    port: 2307,
+    name: "Centery Dashbard",
+    port: 8888,
     debug: true,
     requestTimeout: -1,
     autoload: [
