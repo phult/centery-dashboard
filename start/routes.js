@@ -1,6 +1,5 @@
 module.exports = function ($route, $logger) {
     /** Home Controller **/
-    $route.get("/", "HomeController@index");
     $route.get("/", "HomeController@index", {
         before: ["auth"]
     });
@@ -9,6 +8,11 @@ module.exports = function ($route, $logger) {
     $route.get("/logout", "UserController@logout", {
         before: ["auth"]
     });
+    /** Switch Controller **/
+    $route.io("switch.connect", "SwitchController@connect");
+    $route.io("switch.remove", "SwitchController@remove");
+    $route.io("switch.update", "SwitchController@update");
+    $route.io("switch.disconnect", "SwitchController@disconnect");
     /** Filters **/
     $route.filter("auth", function (io) {
         if (io.session.get("user") == null) {
