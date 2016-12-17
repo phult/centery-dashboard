@@ -13,7 +13,8 @@ function HomeController($config, $event, $logger, $userService) {
             title: title,
             version: packageCfg.version,
             host: localIP,
-            port: $config.get("app.port", "8888")
+            port: $config.get("app.port", "8888"),
+            user: io.session.get("user", {})
         });
     };
 }

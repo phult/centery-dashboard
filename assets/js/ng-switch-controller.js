@@ -11,6 +11,9 @@ centeryApp.controller('SwitchController', function ($scope, $rootScope, $http, $
         });
         io.on('switch.connect', function (data) {
             $scope.$apply(function () {
+                if ($scope.switches == null) {
+                    $scope.switches = [];
+                }
                 var existedItem = $scope.getItem($scope.switches, "address", data.address);
                 if (existedItem == null) {
                     $scope.switches.push(data);
@@ -19,6 +22,9 @@ centeryApp.controller('SwitchController', function ($scope, $rootScope, $http, $
         });
         io.on('switch.update', function (data) {
             $scope.$apply(function () {
+                if ($scope.switches == null) {
+                    $scope.switches = [];
+                }
                 var switchObj = $scope.getItem($scope.switches, "address", data.address);
                 for (var property in data) {
                     switchObj[property] = data[property];
@@ -27,21 +33,19 @@ centeryApp.controller('SwitchController', function ($scope, $rootScope, $http, $
         });
         io.on('switch.disconnect', function (data) {
             $scope.$apply(function () {
+                if ($scope.switches == null) {
+                    $scope.switches = [];
+                }
                 $scope.removeItem($scope.switches, "address", data.address);
             });
         });
         io.on('switch.remove', function (data) {
             $scope.$apply(function () {
+                if ($scope.switches == null) {
+                    $scope.switches = [];
+                }
                 $scope.removeItem($scope.switches, "address", data.address);
             });
-        });
-    };
-    $scope.remove = function(switchObj) {
-        $http.post("/remove-switch", {
-            'switch': switchObj.address
-        }).success(function (data) {
-
-        }).error(function () {
         });
     };
     $scope.getSwitchColor = function(switchObj) {
@@ -107,36 +111,7 @@ centeryApp.controller('SwitchController', function ($scope, $rootScope, $http, $
                 //return;
             }
         }
-        $http.post("/switch", payload).success(function (data) {
-            if (data.status == "ok") {
-            } else {
-            }
-        }).error(function () {
-        });
-    };
-    $scope.rename = function(switchObj) {
-        $scope.onRenaming = true;
-        switchObj.currentName = switchObj.name;
-        $scope.selectedSwitch = switchObj;
-        $timeout(function() {
-            $window.document.getElementById("switch-name").focus();
-        }, 500);
-    };
-    $scope.cancelRename = function() {
-        $scope.onRenaming = false;
-        $scope.selectedSwitch.name = $scope.selectedSwitch.currentName;
-    };
-    $scope.saveName = function() {
-        $scope.onRenaming = false;
-        $scope.selectedSwitch.name = $scope.selectedSwitch.currentName;
-        $http.post("/rename-switch", {
-            'hub': $scope.selectedSwitch.hubAddress,
-            'switch': $scope.selectedSwitch.address,
-            'name': $scope.selectedSwitch.name
-        }).success(function (data) {
-
-        }).error(function () {
-        });
+        io.emit("switch.switch", payload);
     };
     this.initialize();
 });

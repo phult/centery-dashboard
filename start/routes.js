@@ -9,10 +9,12 @@ module.exports = function ($route, $logger) {
         before: ["auth"]
     });
     /** Switch Controller **/
-    $route.io("switch.connect", "SwitchController@connect");
-    $route.io("switch.remove", "SwitchController@remove");
-    $route.io("switch.update", "SwitchController@update");
-    $route.io("switch.disconnect", "SwitchController@disconnect");
+    $route.io("switch.list", "SwitchController@onList");
+    $route.io("switch.connect", "SwitchController@onConnect");
+    $route.io("switch.remove", "SwitchController@onRemove");
+    $route.io("switch.update", "SwitchController@onUpdate");
+    $route.io("switch.disconnect", "SwitchController@onDisconnect");
+    $route.io("switch.switch", "SwitchController@switch");
     /** Filters **/
     $route.filter("auth", function (io) {
         if (io.session.get("user") == null) {

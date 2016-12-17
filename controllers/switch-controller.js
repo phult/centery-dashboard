@@ -1,19 +1,26 @@
 module.exports = SwitchController;
 var util = require(__dir + "/utils/util");
 
-function SwitchController($config, $event, $logger, $userService) {
+function SwitchController($config, $event, $logger, $userService, $switchService) {
     var self = this;
     var title = $config.get("app.name");
-    this.connect = function(io) {
-        console.log("connect", io.inputs);
-    }
-    this.disconnect = function(io) {
-        console.log("disconnect", io.inputs);
-    }
-    this.remove = function(io) {
-        console.log("remove", io.inputs);
-    }
-    this.update = function(io) {
-        console.log("update", io.inputs);
-    }
+    var switches = [];
+    this.onList = function(io) {
+        $switchService.addAll(io);
+    };
+    this.onConnect = function(io) {
+        $switchService.add(io);
+    };
+    this.onDisconnect = function(io) {
+        $switchService.remove(io);
+    };
+    this.onRemove = function(io) {
+        $switchService.remove(io);
+    };
+    this.onUpdate = function(io) {
+        $switchService.update(io);
+    };
+    this.switch = function(io) {
+        $switchService.switch(io);
+    };
 }
