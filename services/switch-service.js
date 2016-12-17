@@ -60,7 +60,7 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
         }
         if (isExisted == false) {
             switches[apiKey].push(switchObj);
-            io.toEvent("switch.connect").toCriteria("ctr_apiKey", apiKey).json(switchObj);
+            broadcastMessageToUser(apiKey, "switch.connect", switchObj);
         }
         $logger.debug("switches", switches);
     };
@@ -83,7 +83,7 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
             }
             if (isExisted == false) {
                 switches[apiKey].push(switchObj);
-                io.toEvent("switch.connect").toCriteria("ctr_apiKey", apiKey).json(switchObj);
+                broadcastMessageToUser(apiKey, "switch.connect", switchObj);
             }
         }
         $logger.debug("add all switches", switches);
@@ -95,7 +95,7 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
         if (userSwitches) {
             for (var i = 0; i < userSwitches.length; i++) {
                 if (userSwitches[i].address == switchObj.address) {
-                    io.toEvent("switch.remove").toCriteria("ctr_apiKey", apiKey).json(switchObj);
+                    broadcastMessageToUser(apiKey, "switch.remove", switchObj);
                     userSwitches.splice(i, 1);
                     break;
                 }
@@ -104,7 +104,6 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
         $logger.debug("switches", switches);
     };
     this.removeAllFromRoom = function(session) {
-        /*
         var apiKey = session.ctr_apiKey;
         var room = session.ctr_room;
         var userSwitches = switches[apiKey];
@@ -112,13 +111,12 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
             for (var i = 0; i < userSwitches.length; i++) {
                 console.log("userSwitches[i]", userSwitches[i]);
                 if (userSwitches[i].room == room) {
-                    io.toEvent("switch.remove").toCriteria("ctr_type", "user").json(userSwitches[i]);
+                    broadcastMessageToUser(apiKey, "switch.remove", userSwitches[i]);
                     userSwitches.splice(i, 1);
                 }
             }
         }
         $logger.debug("removeAllFromRoom", switches);
-        */
     };
     this.update = function(io) {
         var apiKey = io.session.ctr_apiKey;
@@ -134,7 +132,7 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
                     for (var property in switchObj) {
                         userSwitches[i][property] = switchObj[property];
                     }
-                    io.toEvent("switch.update").toCriteria("ctr_apiKey", apiKey).json(userSwitches[i]);
+                    broadcastMessageToUser(apiKey, "switch.update", userSwitches[i]);
                     break;
                 }
             }
@@ -145,14 +143,37 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
         $logger.debug("switches",switches);
     };
     this.switch = function(io) {
-        console.log("this.switch = function(io) {",io.inputs);
+        var apiKey = io.session.ctr_apiKey;
+        var room = io.session.ctr_room;
         var payload = io.inputs;
         payload.type = "dashboard-switch";
-        io.toEvent("message")
-            .toCriteria("ctr_type", "room")
-            .toCriteria("ctr_apiKey", io.session.ctr_apiKey)
-            .toCriteria("ctr_room", io.session.ctr_room)
-            .json(payload);
+        console.log("io.session", io.session);
+        sendMessageToRoom(apiKey, room, "message", payload);
     };
+    this.setTime = function() {
+
+    };
+    function broadcastMessageToUser(apiKey, eventName, data) {
+        $socketIOConnection.sendMessageToFilteredSessions(
+            {
+                ctr_type: "user",
+                ctr_apiKey: apiKey
+            },
+            eventName,
+            data
+        );
+    }
+    function sendMessageToRoom(apiKey, room, eventName, data) {
+        console.log("sendMessageToRoom", apiKey);
+        $socketIOConnection.sendMessageToFilteredSessions(
+            {
+                ctr_type: "room",
+                ctr_apiKey: apiKey,
+                ctr_room: "Room 001"
+            },
+            eventName,
+            data
+        );
+    }
     this.init();
 }

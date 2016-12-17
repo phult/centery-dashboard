@@ -93,6 +93,7 @@ centeryApp.controller('SwitchController', function ($scope, $rootScope, $http, $
             "hub": switchObj.hubAddress,
             "switch": switchObj.address,
             "state": switchObj.state,
+            "room": switchObj.room,
         }
         switch (switchObj.state) {
             case '0':
