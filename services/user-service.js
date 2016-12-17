@@ -26,7 +26,7 @@ function UserService($config, $logger, $event) {
             if (rows != null && rows.length > 0) {
                 retval = true;
             }
-            callbackFn(retval, rows);
+            callbackFn(retval, rows[0]);
         });
     }
     this.findUser = function(filter, callbackFn) {
