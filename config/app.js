@@ -1,5 +1,6 @@
 module.exports = {
     name: "Centery Dashbard",
+    host: "centery.net",
     port: 8888,
     debug: true,
     requestTimeout: -1,
