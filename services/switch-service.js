@@ -167,6 +167,21 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
         }
         $logger.debug("setTimer", timer);
     };
+    this.findRooms = function(filter) {
+        var retval = {};
+        if (filter.apiKey != null) {
+            var apiSwitches = self.find({
+                apiKey: filter.apiKey
+            });
+            for (var i = 0; i < apiSwitches.length; i++) {
+                if (retval[apiSwitches[i].room] == null) {
+                    retval[apiSwitches[i].room] = 1;
+                } else {
+                    retval[apiSwitches[i].room]++;
+                }
+            }
+        }
+        return retval;
     };
     function broadcastMessageToUser(apiKey, eventName, data) {
         $socketIOConnection.sendMessageToFilteredSessions(
@@ -179,7 +194,6 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
         );
     }
     function sendMessageToRoom(apiKey, room, eventName, data) {
-        console.log("sendMessageToRoom", apiKey);
         $socketIOConnection.sendMessageToFilteredSessions(
             {
                 ctr_type: "room",

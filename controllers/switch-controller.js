@@ -17,6 +17,22 @@ function SwitchController($config, $event, $logger, $userService, $switchService
             user: io.session.get("user", {})
         });
     };
+    this.room = function(io) {
+        var title = $config.get("app.name");
+        io.render("room", {
+            title: title,
+            version: packageCfg.version,
+            host: $config.get("app.host", "127.0.0.1"),
+            port: $config.get("app.port", "8888"),
+            user: io.session.get("user", {})
+        });
+    };
+    this.listRooms = function(io) {
+        var rooms = $switchService.findRooms({
+            apiKey: io.inputs.apiKey
+        });
+        io.toEvent("switch.list-rooms").json(rooms);
+    };
     this.onList = function(io) {
         $switchService.addAll(io);
     };

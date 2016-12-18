@@ -9,6 +9,10 @@ module.exports = function ($route, $logger) {
     $route.get("/", "SwitchController@index", {
         before: ["auth"]
     });
+    $route.get("/room", "SwitchController@room", {
+        before: ["auth"]
+    });
+    $route.io("switch.list-rooms", "SwitchController@listRooms");
     $route.io("switch.list", "SwitchController@onList");
     $route.io("switch.connect", "SwitchController@onConnect");
     $route.io("switch.remove", "SwitchController@onRemove");
