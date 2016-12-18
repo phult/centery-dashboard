@@ -6,11 +6,13 @@ centeryApp.controller('SettingController', function ($scope, $rootScope, $http, 
         this.__proto__.initialize();
     };
     $scope.save = function(config) {
-        config.isEditing = false;        
+        config.isEditing = false;
+        /* TODO
         $http.post("/setting", config).success(function (data) {
         }).error(function () {
             config.value = config.currentValue;
         });
+        */
     };
     $scope.edit = function(config) {
         config.isEditing = true;

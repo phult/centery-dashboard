@@ -15,6 +15,10 @@ module.exports = function ($route, $logger) {
     $route.io("switch.update", "SwitchController@onUpdate");
     $route.io("switch.disconnect", "SwitchController@onDisconnect");
     $route.io("switch.switch", "SwitchController@switch");
+    /** Setting Controller **/
+    $route.get("/setting", "SettingController@index", {
+        before: ["auth"]
+    });
     /** Filters **/
     $route.filter("auth", function (io) {
         if (io.session.get("user") == null) {
