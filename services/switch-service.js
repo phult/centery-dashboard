@@ -14,7 +14,7 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
                 case "connection.socketio.connection":
                     {
                         if (session.ctr_type == "room") {
-                            if (switches.indexOf(session.ctr_apiKey) == -1) {
+                            if (switches[session.ctr_apiKey] == null) {
                                 switches[session.ctr_apiKey] = [];
                             }
                             session.socket.emit("list-switches", {});
