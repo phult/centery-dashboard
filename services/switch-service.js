@@ -200,7 +200,7 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
             {
                 ctr_type: "room",
                 ctr_apiKey: apiKey,
-                ctr_room: "Room 001"
+                ctr_room: room
             },
             eventName,
             data
