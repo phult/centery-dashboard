@@ -1,10 +1,22 @@
 module.exports = SwitchController;
 var util = require(__dir + "/utils/util");
-
+var fs = require("fs");
+var packageCfg = require(__dir + "/package.json");
+var networkUtil = require(__dir + "/utils/network-util");
 function SwitchController($config, $event, $logger, $userService, $switchService) {
     var self = this;
     var title = $config.get("app.name");
     var switches = [];
+    this.index = function(io) {
+        var title = $config.get("app.name");
+        io.render("home", {
+            title: title,
+            version: packageCfg.version,
+            host: $config.get("app.host", "127.0.0.1"),
+            port: $config.get("app.port", "8888"),
+            user: io.session.get("user", {})
+        });
+    };
     this.onList = function(io) {
         $switchService.addAll(io);
     };
@@ -21,6 +33,9 @@ function SwitchController($config, $event, $logger, $userService, $switchService
         $switchService.update(io);
     };
     this.switch = function(io) {
-        $switchService.switch(io);
+        $switchService.switch(io.session.ctr_apiKey, io.inputs);
     };
+    this.setTimer = function(io) {
+        $switchService.setTimer(io);
+    }
 }

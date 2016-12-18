@@ -1,6 +1,7 @@
 centeryApp.controller('SwitchController', function ($scope, $rootScope, $http, $window, $timeout, io) {
     var self = this;
     $scope.switches = [];
+    $scope.timer = {};
     this.__proto__ = new BaseController($scope, $rootScope, $http, io);
     this.initialize = function () {
         this.__proto__.initialize();
@@ -90,10 +91,10 @@ centeryApp.controller('SwitchController', function ($scope, $rootScope, $http, $
     };
     $scope.changeState = function(switchObj) {
         var payload = {
-            "hub": switchObj.hubAddress,
-            "switch": switchObj.address,
-            "state": switchObj.state,
-            "room": switchObj.room,
+            hubAddress: switchObj.hubAddress,
+            address: switchObj.address,
+            state: switchObj.state,
+            room: switchObj.room,
         }
         switch (switchObj.state) {
             case '0':
@@ -113,6 +114,37 @@ centeryApp.controller('SwitchController', function ($scope, $rootScope, $http, $
             }
         }
         io.emit("switch.switch", payload);
+    };
+    $scope.setTimerOn = function(switchObj) {
+        $scope.timer = switchObj;
+        $scope.timer.timerType = "on";
+        $scope.timer.timerTime = $scope.getCurrentTimeString(10);
+        $scope.timer.timerDate = $scope.getCurrentDateString();
+    };
+    $scope.setTimerOff = function(switchObj) {
+        $scope.timer = switchObj;
+        $scope.timer.timerType = "off";
+        $scope.timer.timerTime = $scope.getCurrentTimeString(10);
+        $scope.timer.timerDate = $scope.getCurrentDateString();
+    };
+    $scope.saveTimer = function() {
+        if ($scope.timer.timerType == "on"){
+            $scope.timer.timerOn = $scope.timer.timerTime + " " + $scope.timer.timerDate;
+        } else if ($scope.timer.timerType == "off"){
+            $scope.timer.timerOff = $scope.timer.timerTime + " " + $scope.timer.timerDate;
+        }
+        io.emit("switch.set-timer", $scope.timer);
+    };
+    $scope.clearTimer = function() {
+        if ($scope.timer.timerType == "on"){
+            $scope.timer.timerOn = null;
+        } else if ($scope.timer.timerType == "off"){
+            $scope.timer.timerOff = null;
+        }
+        io.emit("switch.set-timer", $scope.timer);
+    };
+    $scope.cancelTimer = function() {
+
     };
     this.initialize();
 });

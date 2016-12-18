@@ -21,6 +21,7 @@
         "ejs": "2.*",
         "lru-cache": "*",
         "crypto": "*",
-        "mysql": "*"
+        "mysql": "*",
+        "fecha": "*"
     }
 }
