@@ -55,6 +55,6 @@ function SwitchController($config, $event, $logger, $userService, $switchService
         $switchService.setTimer(io);
     }
     this.restartRoom = function(io) {
-        $switchService.restartRoom(io.session.get("user", {}).api_key, io.inputs.room);
+        $switchService.restartRoom(io.session.ctr_apiKey, io.inputs.room);
     }
 }
