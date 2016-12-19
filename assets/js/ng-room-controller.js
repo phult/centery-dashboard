@@ -34,7 +34,7 @@ centeryApp.controller('RoomController', function ($scope, $rootScope, $http, io)
     this.reload = function() {
         io.emit("switch.list-rooms", {apiKey: $scope.apiKey});
     };
-    this.restart = function(room) {
+    $scope.restart = function(room) {
         io.emit("switch.restart-room", {room: room});
     };
     this.initialize();
