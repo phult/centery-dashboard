@@ -187,7 +187,7 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
     };
     this.restartRoom = function(apiKey, room) {
         $logger.debug("restartRoom " + apiKey + ":" + room);
-        sendMessageToRoom(apiKey, room, "dashboard-restart-room", {})
+        sendMessageToRoom(apiKey, room, "message", {type: "dashboard-restart-room"})
     }
     function broadcastMessageToUser(apiKey, eventName, data) {
         $socketIOConnection.sendMessageToFilteredSessions(
