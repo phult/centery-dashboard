@@ -13,6 +13,7 @@ module.exports = function ($route, $logger) {
         before: ["auth"]
     });
     $route.io("switch.list-rooms", "SwitchController@listRooms");
+    $route.io("switch.restart-room", "SwitchController@restartRoom");
     $route.io("switch.list", "SwitchController@onList");
     $route.io("switch.connect", "SwitchController@onConnect");
     $route.io("switch.remove", "SwitchController@onRemove");

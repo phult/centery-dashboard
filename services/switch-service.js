@@ -69,7 +69,7 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
             switches[apiKey].push(switchObj);
             broadcastMessageToUser(apiKey, "switch.connect", switchObj);
         }
-        $logger.debug("switches", switches);
+        $logger.debug("add: switches", switches);
     };
     this.addAll = function(io) {
         var apiKey = io.session.ctr_apiKey;
@@ -109,7 +109,7 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
                 }
             }
         }
-        $logger.debug("switches", switches);
+        $logger.debug("remove: switches", switches);
     };
     this.removeRoom = function(session) {
         var apiKey = session.ctr_apiKey;
@@ -185,6 +185,10 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
         }
         return retval;
     };
+    this.restartRoom = function(apiKey, room) {
+        $logger.debug("restartRoom " + apiKey + ":" + room);
+        sendMessageToRoom(apiKey, room, "dashboard-restart-room", {})
+    }
     function broadcastMessageToUser(apiKey, eventName, data) {
         $socketIOConnection.sendMessageToFilteredSessions(
             {
@@ -224,7 +228,7 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
         if (isExisted == false) {
             // switches[apiKey].push(switchObj);
         }
-        $logger.debug("switches",switches);
+        $logger.debug("updateSwitchData: switches",switches);
     }
     function executeTimers() {
         for (var i = 0; i < timers.length; i++) {
