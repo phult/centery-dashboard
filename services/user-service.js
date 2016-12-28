@@ -3,21 +3,14 @@ var mysql = require('mysql');
 
 function UserService($config, $logger, $event) {
     var self = this;
-    var connection = null;
+    var connectionPool = null;
     this.init = function() {
         var dbConfig = $config.get("database");
-        //var connectionPool = mysql.createPool(dbConfig);
-        connection = mysql.createConnection(dbConfig);
-        connection.connect(function(err) {
-            if (err) {
-                $logger.error("cannot connect to database", err);
-                return;
-            }
-            $logger.debug("connected to database!", err);
-        });
+        connectionPool  = mysql.createPool(dbConfig);
     }
     this.login = function(username, password, callbackFn) {
         var retval = false;
+        var result = null;
         self.findUser({
             username: username,
             password: password.hashHex(),
@@ -25,8 +18,9 @@ function UserService($config, $logger, $event) {
         }, function(rows) {
             if (rows != null && rows.length > 0) {
                 retval = true;
+                result = rows[0];
             }
-            callbackFn(retval, rows[0]);
+            callbackFn(retval, result);
         });
     }
     this.findUser = function(filter, callbackFn) {
@@ -46,13 +40,16 @@ function UserService($config, $logger, $event) {
         if (filter["type"] != null) {
             query += " AND type = '" + filter["type"] + "'";
         }
-        connection.query(query, function(err, rows) {
-            if (err) {
-                $logger.error("Query exception: " + query, err);
-                callbackFn(null);
-            } else {
-                callbackFn(rows);
-            }
+        connectionPool.getConnection(function(err, connection) {
+            connection.query(query, function(err, rows) {
+                if (err) {
+                    $logger.error("Query exception: " + query, err);
+                    callbackFn(null);
+                } else {
+                    callbackFn(rows);
+                }
+                connection.release();
+            });
         });
     }
     /* TODO
