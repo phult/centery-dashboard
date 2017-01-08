@@ -21,6 +21,7 @@ module.exports = function ($route, $logger) {
     $route.io("switch.disconnect", "SwitchController@onDisconnect");
     $route.io("switch.switch", "SwitchController@switch");
     $route.io("switch.set-timer", "SwitchController@setTimer");
+    $route.io("hub.update", "SwitchController@onUpdateHub");
     /** Setting Controller **/
     $route.get("/setting", "SettingController@index", {
         before: ["auth"]

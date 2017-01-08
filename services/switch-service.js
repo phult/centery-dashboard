@@ -133,6 +133,18 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
         switchObj.room = io.session.ctr_room;
         updateSwitchData(apiKey, switchObj);
     };
+    this.updateHub = function(apiKey, hub) {
+        var userSwitches = switches[apiKey];
+        broadcastMessageToUser(apiKey, "hub.update", hub);
+        for (var i = 0; i < userSwitches.length; i++) {
+            if (userSwitches[i].hubAddress == hub.address) {
+                updateSwitchData(apiKey, {
+                    address: userSwitches[i].address,
+                    hubName: hub.name
+                });
+            }
+        }
+    };
     /**
     * Change switch state
     * @param apiKey

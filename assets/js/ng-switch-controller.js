@@ -48,6 +48,15 @@ centeryApp.controller('SwitchController', function ($scope, $rootScope, $http, $
                 $scope.removeItem($scope.switches, "address", data.address);
             });
         });
+        io.on('hub.update', function (data) {
+            $scope.$apply(function () {
+                for (var i = 0; i < $scope.switches.length; i++) {
+                    if ($scope.switches[i].hubAddress == data.address) {
+                        $scope.switches[i].hubName = data.name;
+                    }
+                }
+            });
+        });
     };
     $scope.getSwitchColor = function(switchObj) {
         var retval = "";

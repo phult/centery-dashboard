@@ -53,8 +53,11 @@ function SwitchController($config, $event, $logger, $userService, $switchService
     };
     this.setTimer = function(io) {
         $switchService.setTimer(io);
-    }
+    };
     this.restartRoom = function(io) {
         $switchService.restartRoom(io.session.ctr_apiKey, io.inputs.room);
-    }
+    };
+    this.onUpdateHub = function(io) {
+        $switchService.updateHub(io.session.ctr_apiKey, io.inputs);
+    };
 }
