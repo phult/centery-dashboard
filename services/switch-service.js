@@ -116,7 +116,7 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
         var room = session.ctr_room;
         var userSwitches = switches[apiKey];
         if (userSwitches) {
-            for (var i = 0; i < userSwitches.length; i++) {
+            for (var i = userSwitches.length - 1 ; i >= 0; i--) {
                 if (userSwitches[i].room == room) {
                     broadcastMessageToUser(apiKey, "switch.remove", userSwitches[i]);
                     userSwitches.splice(i, 1);
