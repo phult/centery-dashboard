@@ -67,15 +67,17 @@
                                     <tbody><tr>
                                       <th style="width: 10px">#</th>
                                       <th>Room name</th>
-                                      <th>Number of switches</th>
+                                      <th>Hubs</th>
+                                      <th>Switches</th>
                                       <th style="width: 40px"></th>
                                     </tr>
-                                    <tr ng-repeat="(key, value) in rooms">
+                                    <tr ng-repeat="room in rooms">
                                       <td>{{$index+1}}.</td>
-                                      <td>{{key}}</td>
-                                      <td>{{value}}</td>
+                                      <td>{{room.name}}</td>
+                                      <td>{{room.hubCount}}</td>
+                                      <td>{{room.switchCount}}</td>
                                       <th>
-                                          <a href="#"><i class="fa fa-refresh" title="Restart" ng-click="restart(key)"></i></a>
+                                          <a href="#"><i class="fa fa-refresh" title="Restart" ng-click="restart(room)"></i></a>
                                       </th>
                                     </tr>
                                   </tbody></table>

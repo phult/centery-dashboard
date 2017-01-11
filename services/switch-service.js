@@ -187,11 +187,27 @@ function SwitchService($config, $logger, $event, $socketIOConnection) {
             var apiSwitches = self.find({
                 apiKey: filter.apiKey
             });
-            for (var i = 0; i < apiSwitches.length; i++) {
-                if (retval[apiSwitches[i].room] == null) {
-                    retval[apiSwitches[i].room] = 1;
-                } else {
-                    retval[apiSwitches[i].room]++;
+            var roomSessions = $socketIOConnection.sessionManager.findSessions("socket.io", {
+                ctr_type: "room",
+                ctr_apiKey: filter.apiKey
+            });
+            for (var i = 0; i < roomSessions.length; i++) {
+                if (retval[roomSessions[i].ctr_room] == null) {
+                    retval[roomSessions[i].ctr_room] = {
+                        name: roomSessions[i].ctr_room,
+                        hubs: [],
+                        hubCount: 0,
+                        switchCount: 0
+                    };
+                }
+                for (var j = 0; j < apiSwitches.length; j++) {
+                    if (apiSwitches[j].room == roomSessions[i].ctr_room) {
+                        retval[roomSessions[i].ctr_room].switchCount++;
+                        if (retval[roomSessions[i].ctr_room].hubs.indexOf(apiSwitches[j].hubAddress) < 0) {
+                            retval[roomSessions[i].ctr_room].hubs.push(apiSwitches[j].hubAddress);
+                            retval[roomSessions[i].ctr_room].hubCount++;
+                        }
+                    }
                 }
             }
         }

@@ -49,20 +49,12 @@
             <!-- Header -->
             <%- include('components/header') %>
             <!-- Left side column. contains the logo and sidebar -->
-            <%- include('components/sidebar') %>
+            <%- include('components/sidebar-switch') %>
             <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
                 <!-- Main content -->
-                <section class="content-header">
-                  <h1>
-                    Switch
-                    <small>monitor</small>
-                  </h1>
-                </section>
-                <section class="content">
-                    <div class="row" ng-controller="SwitchController">
-                        <%- include('components/switch-list') %>
-                    </div>
+                <section class="content" ng-controller="SwitchController">
+                    <%- include('components/switch-list') %>
                 </section>
                 <!-- /.content -->
             </div>
@@ -89,5 +81,17 @@
         <script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
         <!-- ChartJS 1.0.1 -->
         <script src="plugins/chartjs/Chart.min.js"></script>
+        <script src="plugins/timepicker/bootstrap-timepicker.min.js"></script>
+        <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
+        <script src="plugins/input-mask/jquery.inputmask.js"></script>
+        <script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+        <script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
+        <script>
+        $(document).ready(function() {
+            $('.datepickerss').datepicker({
+                autoclose: true
+            });
+        });
+        </script>
     </body>
 </html>

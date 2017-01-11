@@ -35,10 +35,10 @@ centeryApp.controller('RoomController', function ($scope, $rootScope, $http, io)
         io.emit("switch.list-rooms", {apiKey: $scope.apiKey});
     };
     $scope.restart = function(room) {
-        if (!confirm("Do you want to restart the room: " + room + " ?")) {
+        if (!confirm("Do you want to restart the room: " + room.name + " ?")) {
             return;
         }
-        io.emit("switch.restart-room", {room: room});
+        io.emit("switch.restart-room", {room: room.name});
     };
     this.initialize();
 });

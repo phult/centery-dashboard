@@ -8,6 +8,7 @@ var Driver = require("./driver");
 var sessions = {};
 var driver = null;
 function SessionManager() {
+    var self = this;
     this.SESSION_ID_KEY = "_qsort_session_id";
     this.timeout = -1;
     this.interval = 60000;
@@ -173,6 +174,26 @@ function SessionManager() {
                     retval.push(sessions[sessionId]);
                 }
                 retval = sessions;
+            }
+        }
+        return retval;
+    };
+    /**
+     * find sessions by filter
+     * @returns {Array}
+     */
+    this.findSessions = function (type, filter) {
+        var retval = self.getSessions(type);
+        for (var i = retval.length - 1; i >= 0; i--) {
+            var isValidSession = true;
+            for (var filterProp in filter) {
+                if (!retval[i].hasOwnProperty(filterProp) || (retval[i].hasOwnProperty(filterProp) && retval[i][filterProp] != filter[filterProp])) {
+                    isValidSession = false;
+                    break;
+                }
+            }
+            if (!isValidSession) {
+                retval.splice(i, 1);
             }
         }
         return retval;
