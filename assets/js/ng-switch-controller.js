@@ -4,6 +4,7 @@ centeryApp.controller('SwitchController', function ($scope, $rootScope, $http, $
     $scope.hubs = [];
     $scope.rooms = [];
     $scope.timer = {};
+    $scope.selectedRoom = null;
     this.__proto__ = new BaseController($scope, $rootScope, $http, io);
     this.initialize = function () {
         this.__proto__.initialize();
@@ -157,13 +158,23 @@ centeryApp.controller('SwitchController', function ($scope, $rootScope, $http, $
     $scope.cancelTimer = function() {
 
     };
+    $scope.selectRoom = function(room) {
+        $scope.selectedRoom = room;
+        buildViewModel();
+    };
     $scope.$watch("switches", function(newValue, oldValue){
-        $scope.rooms = listRooms();
-        $scope.hubs = listHubs();
+        buildViewModel();
     });
-    function listHubs() {
+    function buildViewModel() {
+        $scope.rooms = listRooms();
+        $scope.hubs = listHubs($scope.selectedRoom);
+    }
+    function listHubs(room) {
         var retval = {};
         for (var i = 0; i < $scope.switches.length; i++) {
+            if (room != null && $scope.switches[i].room == room) {
+                continue;
+            }
             if (retval[$scope.switches[i].hubAddress] == null) {
                 retval[$scope.switches[i].hubAddress] = {
                     address: $scope.switches[i].hubAddress,
